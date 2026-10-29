@@ -29,9 +29,17 @@ if "messages" not in st.session_state:
 
 # Display prior chat messages (skipping the system prompt)
 for message in st.session_state.messages:
-    if message["role"] != "system":
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+    # Safely handle whether the message is a dict or a Groq object
+    if isinstance(message, dict):
+        role = message.get("role")
+        content = message.get("content")
+    else:
+        role = getattr(message, "role", None)
+        content = getattr(message, "content", None)
+
+    if role and role != "system":
+        with st.chat_message(role):
+            st.markdown(content if content else "")
 
 # Handle user input from Streamlit's chat box
 if prompt := st.chat_input("Ask anything or request a task..."):
