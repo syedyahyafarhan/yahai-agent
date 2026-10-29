@@ -1,0 +1,14 @@
+app = 'yahai-agent'
+primary_region = 'iad' # (Keep whatever region was generated for you)
+
+[build]
+  # This tells Fly to use your custom Dockerfile
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
